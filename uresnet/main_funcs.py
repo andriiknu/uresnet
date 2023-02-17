@@ -341,7 +341,9 @@ def full_inference_loop(flags, handlers):
                 # metrics['iteration'] = [loaded_iteration] * len(idx) * len(idx[0])
                 metrics['iteration'] = [loaded_iteration] * len(metrics['acc'])
                 for key in metrics:
-                    if key in global_metrics:
+                    if key in global_metrics:    
+                        if key == 'misclassified_pixels':
+                            print(len(metrics[key][0]))                
                         global_metrics[key].extend(metrics[key])
                     else:
                         global_metrics[key] = list(metrics[key])
@@ -363,7 +365,10 @@ def full_inference_loop(flags, handlers):
     global_metrics['iteration'] = np.hstack(global_metrics['iteration'])
     # global_metrics['iteration'] = np.repeat(global_metrics['iteration'][:, None], global_metrics['id'].shape[1])
     for key in global_metrics:
+        # print('key = {}'.format(key))
+        # print(global_metrics[key])
         global_metrics[key] = np.array(global_metrics[key])
+        # print("\n\n\n{}\n\n\n".format(global_metrics[key].shape))
 
     res = {}
     # 90% quantile

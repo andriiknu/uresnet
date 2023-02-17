@@ -163,6 +163,14 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
                                                                incorrect_pixels_predicted,
                                                                incorrect_pixels[:, -1][:, None],  # Energy
                                                                incorrect_pixels_labels], axis=1))
+            # print("\n\n\nLEN = {}\n\n\n".format(len(np.concatenate([incorrect_pixels[:, 0:-2],
+            #                                                    incorrect_pixels_correct_softmax,
+            #                                                    incorrect_pixels_predicted_softmax,
+            #                                                    incorrect_pixels_predicted,
+            #                                                    incorrect_pixels[:, -1][:, None],  # Energy
+            #                                                    incorrect_pixels_labels], axis=1))))
+
+
             # Nonzero pixels and their distance to the boundary
             min_v = []
             for d in range(event_data.shape[1]-2):
@@ -185,6 +193,10 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
             energy_confusion_matrix = np.zeros((num_classes, num_classes), dtype=np.float32)
             for c in range(num_classes):
                 class_index = event_label == c
+                # if len(event_label[class_index]) == 0:
+                #     print((event_label[class_index] == predictions[class_index]).astype(np.int32).sum())
+                #     print((event_label[class_index] == predictions[class_index]).astype(np.int32).sum() / float(len(event_label[class_index])))
+                #     raise Exception("len(event_label[class_index]) == 0")
                 class_acc.append((event_label[class_index] == predictions[class_index]).astype(np.int32).sum() / float(len(event_label[class_index])))
                 # class_cluster_index = event_label[clusters_index] == c
                 # class_cluster_acc.append((event_label[clusters_index][class_cluster_index] == predictions[clusters_index][class_cluster_index]).astype(np.int32).sum() / float(len(event_label[clusters_index][class_cluster_index])))
@@ -371,6 +383,9 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
             #         matplotlib.image.imsave('%s/%d_%d_softmax_%d.png' % (directory, idx, batch_id, c), softmax_dense, dpi=500, origin='lower', vmin=0.0, vmax=1.0)
 
             res['class_acc'].append(class_acc)
+            # print('-----------------------------\n')
+            # print(len(res['misclassified_pixels']))
+            # print('\n-----------------------------')
             res['class_mean_softmax'].append(class_mean_softmax)
             res['class_pixel'].append(np.hstack(class_pixel))
             res['confusion_matrix'].append(confusion_matrix)
@@ -429,7 +444,7 @@ def compute_metrics_dense(data_v, label_v, softmax_v, idx_v):
                                                            incorrect_pixels_predicted,
                                                            incorrect_pixels,  # Energy
                                                            incorrect_pixels_labels], axis=1))
-        # Nonzero pixels and their distance to the boundary
+
         min_v = []
         N = event_data.shape[-1]
         coords = np.vstack(np.where(nonzero_idx)).T[:, 1:]

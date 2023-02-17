@@ -14,12 +14,12 @@ All options can be found in `uresnet/flags.py`.
 
 To train sparse U-ResNet you can use for example:
 ```
-python bin/uresnet.py train -chks 500 -wp weights/snapshot -io larcv_sparse -bs 1 --gpus 0 -nc 5 -rs 1 -ss 512 -dd 3 -uns 5 -uf 16 -dkeys data,fivetypes -mn uresnet_sparse -it 10 -ld log -if your_data.root
+python bin/uresnet.py train -chks 1 -wp weights/snapshot -io larcv_sparse -bs 1 --gpus 0 -nc 5 -rs 1 -ss 512 -dd 3 -uns 5 -uf 16 -dkeys data,fivetypes -mn uresnet_sparse -it 1 -ld log -if ../dlp_opendata_api/dlprod_ppn_v10/dlprod_192px_00.root
 ```
 
 To run the inference:
 ```
-python bin/uresnet.py inference --full -mp weights/snapshot-1000.ckpt -io larcv_sparse -bs 1 --gpus 0 -nc 5 -rs 1 -ss 512 -dd 3 -uns 5 -uf 16 -dkeys data,fivetypes -mn uresnet_sparse -it 10 -ld log -if your_data.root
+python bin/uresnet.py inference --full -mp weights/snapshot-0.ckpt -io larcv_sparse -bs 1 --gpus 0 -nc 5 -rs 1 -ss 512 -dd 3 -uns 5 -uf 16 -dkeys data,fivetypes -mn uresnet_sparse -it 1 -ld log -if ../dlp_opendata_api/dlprod_ppn_v10/dlprod_192px_00.root
 ```
 
 Main command-line parameters:
