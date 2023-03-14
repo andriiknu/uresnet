@@ -5,9 +5,9 @@ URESNET_DIR = os.path.dirname(os.path.abspath(__file__))
 URESNET_DIR = os.path.dirname(URESNET_DIR)
 print(URESNET_DIR)
 sys.path.insert(0, URESNET_DIR)
-sys.path.insert(1, "/home/andrii/master/uresnet_pytorch/uresnet")
-sys.path.insert(0, "/home/andrii/master/uresnet_pytorch/uresnet/iotools")
-sys.path.insert(1, "/home/andrii/master/uresnet_pytorch/uresnet/models")
+sys.path.insert(1, f"{URESNET_DIR}/uresnet")
+sys.path.insert(0, f"{URESNET_DIR}/uresnet/iotools")
+sys.path.insert(1, f"{URESNET_DIR}/uresnet/models")
 from uresnet.flags import URESNET_FLAGS
 
 def main():

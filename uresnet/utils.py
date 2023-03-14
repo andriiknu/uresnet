@@ -80,51 +80,51 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
     assert len(data_v) == len(softmax_v)
     res = {
         'acc': [],
-        'correct_softmax': [],
+        # 'correct_softmax': [],
         'id': [],
         'nonzero_pixels': [],
         'class_acc': [],
-        'class_pixel': [],
-        'class_mean_softmax': [],
+        # 'class_pixel': [],
+        # 'class_mean_softmax': [],
         # 'cluster_acc': [],
         # 'class_cluster_acc': [],
-        'confusion_matrix': [],
-        'energy_confusion_matrix': [],
-        'loss_seg': [],
-        'misclassified_pixels': [],
+        # 'confusion_matrix': [],
+        # 'energy_confusion_matrix': [],
+        # 'loss_seg': [],
+      # 'misclassified_pixels': [],
         'distances': [],
         # Michel energy analysis
-        'michel_num': [],
-        'michel_actual_num': [],
-        'michel_deposited_energy': [],
-        'michel_start_x': [],
-        'michel_start_y': [],
-        'michel_start_z': [],
-        'michel_end_x': [],
-        'michel_end_y': [],
-        'michel_end_z': [],
-        'michel_creation_x': [],
-        'michel_creation_y': [],
-        'michel_creation_z': [],
-        'michel_npx': [],
-        'michel_creation_energy': [],
-        'michel_creation_momentum': [],
-        # For each true michel electron
-        'michel_appended': [],
-        'michel_num_pix': [],
-        'michel_sum_pix': [],
-        'michel_sum_pix_pred': [],
-        'michel_num_pix_pred': [],
-        # For each predicted Michel cluster
-        'michel_is_attached': [],  # Whether attached to MIP
-        'michel_is_edge': [],  # Whether to the edge of MIP
-        'michel_pred_num_pix': [],  # Num pix in predicted cluster
-        'michel_pred_sum_pix': [],  # Sum of pix in predicted cluster
-        'michel_pred_num_pix_true': [],  # Num pix in predicted cluster inter matched true cluster
-        'michel_pred_sum_pix_true': [],  # Sum of pix in predicted cluster inter matched true cluster
-        'michel_true_num_pix': [],  # Num of pix in matched true cluster
-        'michel_true_sum_pix': [],  # Sum of pix in matched true cluster
-        'michel_true_energy': [],
+        # 'michel_num': [],
+        # 'michel_actual_num': [],
+        # 'michel_deposited_energy': [],
+        # 'michel_start_x': [],
+        # 'michel_start_y': [],
+        # 'michel_start_z': [],
+        # 'michel_end_x': [],
+        # 'michel_end_y': [],
+        # 'michel_end_z': [],
+        # 'michel_creation_x': [],
+        # 'michel_creation_y': [],
+        # 'michel_creation_z': [],
+        # 'michel_npx': [],
+        # 'michel_creation_energy': [],
+        # 'michel_creation_momentum': [],
+        # # For each true michel electron
+        # 'michel_appended': [],
+        # 'michel_num_pix': [],
+        # 'michel_sum_pix': [],
+        # 'michel_sum_pix_pred': [],
+        # 'michel_num_pix_pred': [],
+        # # For each predicted Michel cluster
+        # 'michel_is_attached': [],  # Whether attached to MIP
+        # 'michel_is_edge': [],  # Whether to the edge of MIP
+        # 'michel_pred_num_pix': [],  # Num pix in predicted cluster
+        # 'michel_pred_sum_pix': [],  # Sum of pix in predicted cluster
+        # 'michel_pred_num_pix_true': [],  # Num pix in predicted cluster inter matched true cluster
+        # 'michel_pred_sum_pix_true': [],  # Sum of pix in predicted cluster inter matched true cluster
+        # 'michel_true_num_pix': [],  # Num of pix in matched true cluster
+        # 'michel_true_sum_pix': [],  # Sum of pix in matched true cluster
+        # 'michel_true_energy': [],
     }
     dbscan_vv = []
     for i, label in enumerate(label_v):
@@ -142,33 +142,28 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
             acc = (event_label == predictions).astype(np.int32).sum() / float(len(event_label))
             res['acc'].append(acc)
             # Loss TODO add weighting
-            loss = log_loss(event_label.astype(np.int32), event_softmax, labels=np.arange(event_softmax.shape[1]))
-            res['loss_seg'].append(loss)
+            # loss = log_loss(event_label.astype(np.int32), event_softmax, labels=np.arange(event_softmax.shape[1]))
+            # res['loss_seg'].append(loss)
 
             # Softmax score of correct labels
-            correct_softmax = event_softmax[np.arange(len(event_label)), event_label.reshape((-1,)).astype(np.int32)][:, None]
-            res['correct_softmax'].append(np.mean(correct_softmax))
+            # correct_softmax = event_softmax[np.arange(len(event_label)), event_label.reshape((-1,)).astype(np.int32)][:, None]
+            # res['correct_softmax'].append(np.mean(correct_softmax))
             res['id'].append(batch_id)
             res['nonzero_pixels'].append(event_label.shape[0])
 
             # Incorrect pixels and their distance to the boundary
-            incorrect_pixels = event_data[(predictions != event_label).reshape((-1,)), ...]
-            incorrect_pixels_labels = event_label[predictions != event_label][:, None]
-            incorrect_pixels_predicted = predictions[predictions != event_label][:, None]
-            incorrect_pixels_correct_softmax = correct_softmax[predictions != event_label][:, None]
-            incorrect_pixels_predicted_softmax = event_softmax[np.arange(len(event_label)), predictions.reshape((-1,)).astype(np.int32)][:, None][predictions != event_label][:, None]
-            res['misclassified_pixels'].append(np.concatenate([incorrect_pixels[:, 0:-2],
-                                                               incorrect_pixels_correct_softmax,
-                                                               incorrect_pixels_predicted_softmax,
-                                                               incorrect_pixels_predicted,
-                                                               incorrect_pixels[:, -1][:, None],  # Energy
-                                                               incorrect_pixels_labels], axis=1))
-            # print("\n\n\nLEN = {}\n\n\n".format(len(np.concatenate([incorrect_pixels[:, 0:-2],
+            # incorrect_pixels = event_data[(predictions != event_label).reshape((-1,)), ...]
+            # incorrect_pixels_labels = event_label[predictions != event_label][:, None]
+            # incorrect_pixels_predicted = predictions[predictions != event_label][:, None]
+            # incorrect_pixels_correct_softmax = correct_softmax[predictions != event_label][:, None]
+            # incorrect_pixels_predicted_softmax = event_softmax[np.arange(len(event_label)), predictions.reshape((-1,)).astype(np.int32)][:, None][predictions != event_label][:, None]
+            # res['misclassified_pixels'].append(np.concatenate([incorrect_pixels[:, 0:-2],
             #                                                    incorrect_pixels_correct_softmax,
             #                                                    incorrect_pixels_predicted_softmax,
             #                                                    incorrect_pixels_predicted,
             #                                                    incorrect_pixels[:, -1][:, None],  # Energy
-            #                                                    incorrect_pixels_labels], axis=1))))
+            #                                                    incorrect_pixels_labels], axis=1))
+
 
 
             # Nonzero pixels and their distance to the boundary
@@ -183,16 +178,22 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
             # cluster_acc = (event_label[clusters_index] == predictions[clusters_index]).astype(np.int32).sum() / clusters_index.astype(np.int32).sum()
             # res['cluster_acc'].append(cluster_acc)
 
-            classes, class_count = np.unique(event_label, return_counts=True)
-            class_pixel = []
+            # classes, class_count = np.unique(event_label, return_counts=True)
+            # class_pixel = []
             class_acc = []
-            class_mean_softmax = []
+            # class_mean_softmax = []
             # class_cluster_acc = []
             num_classes = event_softmax.shape[1]
-            confusion_matrix = np.zeros((num_classes, num_classes), dtype=np.int32)
-            energy_confusion_matrix = np.zeros((num_classes, num_classes), dtype=np.float32)
+            # confusion_matrix = np.zeros((num_classes, num_classes), dtype=np.int32)
+            # energy_confusion_matrix = np.zeros((num_classes, num_classes), dtype=np.float32)
+            # if 4 in np.unique(event_label):
+            #     if 4 in predictions[event_label==4]:
+            #         acccc = (event_label[event_label==4] == predictions[event_label==4]).astype(np.int32).sum() / float(len(event_label[event_label==4]))
+            #         raise Exception(f"There is right prediction for Michel electron at event = {idx_v[batch_id]}\nacc = {acccc}")
             for c in range(num_classes):
                 class_index = event_label == c
+                
+
                 # if len(event_label[class_index]) == 0:
                 #     print((event_label[class_index] == predictions[class_index]).astype(np.int32).sum())
                 #     print((event_label[class_index] == predictions[class_index]).astype(np.int32).sum() / float(len(event_label[class_index])))
@@ -200,15 +201,15 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
                 class_acc.append((event_label[class_index] == predictions[class_index]).astype(np.int32).sum() / float(len(event_label[class_index])))
                 # class_cluster_index = event_label[clusters_index] == c
                 # class_cluster_acc.append((event_label[clusters_index][class_cluster_index] == predictions[clusters_index][class_cluster_index]).astype(np.int32).sum() / float(len(event_label[clusters_index][class_cluster_index])))
-                class_mean_softmax.append(np.mean(correct_softmax[class_index]))
-                if c in classes:
-                    class_pixel.append(class_count[classes == c])
-                else:
-                    class_pixel.append(0)
-                for c2 in range(num_classes):
-                    confusion_index = predictions[class_index] == c2
-                    confusion_matrix[c][c2] = confusion_index.astype(np.int32).sum()
-                    energy_confusion_matrix[c][c2] = event_data[..., -1][..., None][class_index][confusion_index].sum()
+                # class_mean_softmax.append(np.mean(correct_softmax[class_index]))
+                # if c in classes:
+                #     class_pixel.append(class_count[classes == c])
+                # else:
+                #     class_pixel.append(0)
+                # for c2 in range(num_classes):
+                #     confusion_index = predictions[class_index] == c2
+                #     confusion_matrix[c][c2] = confusion_index.astype(np.int32).sum()
+                #     energy_confusion_matrix[c][c2] = event_data[..., -1][..., None][class_index][confusion_index].sum()
 
             # Michel energy distribution
             if particles is not None:
@@ -386,10 +387,10 @@ def compute_metrics_sparse(data_v, label_v, softmax_v, idx_v, N=192, particles=N
             # print('-----------------------------\n')
             # print(len(res['misclassified_pixels']))
             # print('\n-----------------------------')
-            res['class_mean_softmax'].append(class_mean_softmax)
-            res['class_pixel'].append(np.hstack(class_pixel))
-            res['confusion_matrix'].append(confusion_matrix)
-            res['energy_confusion_matrix'].append(energy_confusion_matrix)
+            # res['class_mean_softmax'].append(class_mean_softmax)
+            # res['class_pixel'].append(np.hstack(class_pixel))
+            # res['confusion_matrix'].append(confusion_matrix)
+            # res['energy_confusion_matrix'].append(energy_confusion_matrix)
             # res['class_cluster_acc'].append(class_cluster_acc)
     return res, dbscan_vv
 
